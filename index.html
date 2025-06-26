@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tarefas</title>
+    <style>
+        /* Estilos básicos para a interface */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minha Lista de Tarefas</h1>
+        <form id="task-form">
+            <input type="text" id="task-input" placeholder="Nova tarefa..." required>
+            <button type="submit">Adicionar</button>
+        </form>
+        <ul id="task-list"></ul>
+    </div>
+
+    <script>
+        // TODO: Implementar o JavaScript aqui// 1. Aguardar o carregamento completo do DOM
+document.addEventListener('DOMContentLoaded', function() {
+    // 2. Selecionar elementos do DOM que serão utilizados
+    const taskForm = document.getElementById('task-form');
+    const taskInput = document.getElementById('task-input');
+    const taskList = document.getElementById('task-list');
+    
+    // 3. Carregar tarefas do LocalStorage quando a página carrega
+    loadTasks();
+    
+    // 4. Adicionar evento de submit ao formulário
+    taskForm.addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevenir comportamento padrão do formulário
+        
+        // 5. Obter valor do input e validar
+        const taskText = taskInput.value.trim();
+        if (taskText === '') return;
+        
+        // 6. Adicionar nova tarefa
+        addTask(taskText);
+        
+        // 7. Limpar input e focar nele novamente
+        taskInput.value = '';
+        taskInput.focus();
+    });
+    
+    // 8. Função para carregar tarefas do LocalStorage
+    function loadTasks() {
+        // 9. Obter tarefas do LocalStorage (ou array vazio se não existir)
+        const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        
+        // 10. Para cada tarefa, adicionar ao DOM
+        tasks.forEach(task => {
+            createTaskElement(task);
+        });
+    }
+    
+    // 11. Função para adicionar nova tarefa
+    function addTask(taskText) {
+        // 12. Criar objeto representando a tarefa
+        const task = {
+            id: Date.now(), // Usar timestamp como ID único
+            text: taskText,
+            completed: false
+        };
+        
+        // 13. Criar elemento no DOM
+        createTaskElement(task);
+        
+        // 14. Salvar no LocalStorage
+        saveTaskToLocalStorage(task);
+    }
+    
+    // 15. Função para criar elemento de tarefa no DOM
+    function createTaskElement(task) {
+        // 16. Criar elementos HTML
+        const li = document.createElement('li');
+        li.setAttribute('data-id', task.id);
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.completed;
+        checkbox.addEventListener('change', toggleTaskCompletion);
+        
+        const span = document.createElement('span');
+        span.textContent = task.text;
+        if (task.completed) {
+            span.style.textDecoration = 'line-through';
+        }
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = '×';
+        deleteBtn.addEventListener('click', deleteTask);
+        
+        // 17. Montar estrutura
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(deleteBtn);
+        
+        // 18. Adicionar à lista
+        taskList.appendChild(li);
+    }
+    
+    // 19. Função para alternar status de conclusão da tarefa
+    function toggleTaskCompletion(e) {
+        const taskId = parseInt(e.target.parentElement.getAttribute('data-id'));
+        
+        // 20. Obter tarefas do LocalStorage
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        
+        // 21. Encontrar e atualizar tarefa
+        tasks = tasks.map(task => {
+            if (task.id === taskId) {
+                task.completed = !task.completed;
+            }
+            return task;
+        });
+        
+        // 22. Salvar alterações
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+        
+        // 23. Atualizar estilo visual
+        const span = e.target.nextElementSibling;
+        span.style.textDecoration = e.target.checked ? 'line-through' : 'none';
+    }
+    
+    // 24. Função para deletar tarefa
+    function deleteTask(e) {
+        const taskId = parseInt(e.target.parentElement.getAttribute('data-id'));
+        
+        // 25. Remover do DOM
+        e.target.parentElement.remove();
+        
+        // 26. Atualizar LocalStorage
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        tasks = tasks.filter(task => task.id !== taskId);
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+    
+    // 27. Função para salvar nova tarefa no LocalStorage
+    function saveTaskToLocalStorage(task) {
+        // 28. Obter tarefas existentes (ou array vazio)
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        
+        // 29. Adicionar nova tarefa
+        tasks.push(task);
+        
+        // 30. Salvar no LocalStorage
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+});
+    </script>
+</body>
+</html>
+
