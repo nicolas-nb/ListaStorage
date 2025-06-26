@@ -1,0 +1,2 @@
+# ListaStorage
+LocalStorage e EventListeners.
