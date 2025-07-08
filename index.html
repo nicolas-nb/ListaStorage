@@ -3,23 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Tarefas</title>
+    <title>Lista de Tarefas Roxa</title>
     <style>
-        /* Estilos básicos para a interface */
+        :root {
+            --primary-color: #6a0dad;
+            --secondary-color: #9c27b0;
+            --light-purple: #ba68c8;
+            --very-light-purple: #e1bee7;
+            --text-color: #333;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color);
+        }
+        
+        .container {
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            padding: 2rem;
+            margin: 2rem;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        #task-form {
+            display: flex;
+            margin-bottom: 1.5rem;
+        }
+        
+        #task-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--very-light-purple);
+            border-radius: 4px 0 0 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        #task-input:focus {
+            outline: none;
+            border-color: var(--light-purple);
+        }
+        
+        #task-form button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        
+        #task-form button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        #task-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        #task-list li {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background-color: var(--very-light-purple);
+            margin-bottom: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        #task-list li:hover {
+            transform: translateX(5px);
+        }
+        
+        #task-list li input[type="checkbox"] {
+            margin-right: 1rem;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        #task-list li span {
+            flex: 1;
+        }
+        
+        #task-list li.completed span {
+            text-decoration: line-through;
+            color: #777;
+        }
+        
+        #task-list li button {
+            background-color: transparent;
+            border: none;
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 0 0.5rem;
+            transition: color 0.3s;
+        }
+        
+        #task-list li button:hover {
+            color: #d32f2f;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Minha Lista de Tarefas</h1>
         <form id="task-form">
-            <input type="text" id="task-input" placeholder="Nova tarefa..." required>
-            <button type="submit">Adicionar</button>
+            <input type="text" id="task-input" placeholder="Adicione uma nova tarefa..." required>
+            <button type="submit">+</button>
         </form>
         <ul id="task-list"></ul>
     </div>
+    <div class="task-counter">0 tarefas restantes</div>
 
     <script>
-        // TODO: Implementar o JavaScript aqui// 1. Aguardar o carregamento completo do DOM
+// 1. Aguardar o carregamento completo do DOM
 document.addEventListener('DOMContentLoaded', function() {
     // 2. Selecionar elementos do DOM que serão utilizados
     const taskForm = document.getElementById('task-form');
@@ -146,11 +264,16 @@ document.addEventListener('DOMContentLoaded', function() {
         // 29. Adicionar nova tarefa
         tasks.push(task);
         
-        // 30. Salvar no LocalStorage
+        // 30. Salvar no LocalStorage,,,,,,,
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
-});
-    </script>
+    function updateTaskCounter() {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const activeTasks = tasks.filter(task => !task.completed).length;
+    document.querySelector('.task-counter').textContent = 
+        `${activeTasks} ${activeTasks === 1 ? 'tarefa restante' : 'tarefas restantes'}`;
+}
+// Chame esta função sempre que adicionar, completar ou remover uma tarefa
+});    </script>
 </body>
 </html>
-
