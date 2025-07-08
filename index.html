@@ -267,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // 30. Salvar no LocalStorage,,,,,,,
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
+<<<<<<< HEAD
     function updateTaskCounter() {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     const activeTasks = tasks.filter(task => !task.completed).length;
@@ -277,3 +278,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });    </script>
 </body>
 </html>
+=======
+});    </script>
+</body>
+</html>
+>>>>>>> 0585f59f6a61901a7c0fbb5331fa7601f013e8d4
