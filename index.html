@@ -141,6 +141,9 @@
         <ul id="task-list"></ul>
     </div>
     <div class="task-counter">0 tarefas restantes</div>
+    <button id="subtrai" type="submit">subtrai</button>
+    <button id="adiciona" type="submit">adiciona</button>
+    <p>cliques totais; <span id="click">0</span></p>
 
     <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -244,6 +247,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const activeTasks = tasks.filter(task => !task.completed).length;
         document.querySelector('.task-counter').textContent = 
             `${activeTasks} ${activeTasks === 1 ? 'tarefa restante' : 'tarefas restantes'}`;
+    }
+
+    document.getElementById('adiciona').addEventListener('click', function ) {
+        let count = localStorage.getItem('click') || 0;
+        count = parseInt(count) + 1;
+        localStorage.setItem('click', count);
+        document.getElementById('click').textContent = count;
+    }
+
+    document.getElementById('subtrai').addEventListener('click', function ) {
+        let count = localStorage.getItem('click') || 0;
+        count = parseInt(count) - 1;
+        localStorage.setItem('click', count);
+        document.getElementById('click').textContent = count;
     }
 });
   </script>
